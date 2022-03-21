@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aowin.scm.dao.PayRecordDao">
+    <insert id="addPayRecord" parameterType="PayRecord">
+        insert into payrecord (pay_time,pay_price,account,orderCode,pay_type)
+        values (#{pay_time},#{pay_price},#{account},#{orderCode},#{pay_type})
+    </insert>
+
+    <select id="findPayRecords" resultType="PayRecord">
+        select * from payrecord where pay_type=#{pay_Type}
+        <if test="startDate != null and startDate != ''and endDate != null and endDate != ''">
+            and date(pay_time) between #{startDate} and #{endDate}
+        </if>
+        <if test="orderCode != null">
+            and orderCode like concat('%',#{orderCode},'%')
+        </if>
+    </select>
+
+    <select id="countAllPayRecords" resultType="int">
+        select count(*) from payrecord where productCode=#{productCode}
+    </select>
+
+    <select id="searchPayRecordByMonth" resultType="PayRecord">
+        select * from payrecord where date(payrecord.pay_time) between #{startDate} and #{endDate} limit #{first},#{max}
+    </select>
+
+    <select id="countPayRecordByMonth" resultType="int" parameterType="DateRange">
+        select count(*) from payrecord where date(payrecord.pay_time) between #{startDate} and #{endDate}
+    </select>
+</mapper>

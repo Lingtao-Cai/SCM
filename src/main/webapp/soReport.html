@@ -1,0 +1,87 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li>report</li>
+        <li>monthly report</li>
+    </ul>
+</div>
+
+<div class="formbody" style="margin-left: 200px">
+    <form>
+        <ul class="seachform">
+
+            <li>
+                <label>date</label>
+                <input type="text" name="" class="scinput" id="soTime" placeholder="please select date"/>
+            </li>
+
+
+
+            <li><label>&nbsp;</label><a href="javascript:;" onclick="searchSoByMonth()">查询</a></li>
+
+        </ul>
+    </form>
+
+    <!-- main information -->
+    <table class="tablelist">
+        <tr>
+            <th>sale order number</th>
+            <th>ended orders</th>
+            <th>sale in total</th>
+            <th>paied in total</th>
+        </tr>
+        <tr>
+            <td id="soNumTotal"></td>
+            <td id="soEndNum"></td>
+            <td id="soTotalPrice"></td>
+            <td id="soPaidTotal"></td>
+        </tr>
+        </script>
+    </table>
+
+    <!-- detailed information -->
+    <table class="tablelist" style="margin-top:20px">
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>sale order id</th>
+            <th>customer id</th>
+            <th>customer name</th>
+            <th>sold date</th>
+            <th>user</th>
+            <th>sold in total</th>
+            <th>unpaid in total</th>
+            <th>status</th>
+        </tr>
+        <tbody id="soReportItemsTableBody"></tbody>
+        <script id="soReportItemsListTemplate" type="text/html">
+            {{each data.soMains}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showStockOutDetails(this)">{{$value.soId}}</a></td>
+                <td>{{$value.customerCode}}</td>
+                <td>{{$value.customerName}}</td>
+                <td>{{$value.createTime}}</td>
+                <td>{{$value.account}}</td>
+                <td>{{$value.soTotal}}</td>
+                <td>{{$value.unpaidFee}}</td>
+                <td>{{$value.status}}</td>
+            </tr>
+            {{/each}}
+        </script>
+    </table>
+
+</div>
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 250px;position: absolute">分页</ul>
+</div>
+
+<script type="text/javascript">
+    laydate.render({
+        elem: '#soTime',
+        type: 'month'
+    });
+
+
+
+</script>

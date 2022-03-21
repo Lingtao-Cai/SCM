@@ -1,0 +1,178 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li>stock management</li>
+        <li>stock</li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+    <div class="itab" href="#tab">
+        <ul>
+            <li><a href="javascript:;" onclick="findStockPoMain(this)"/>cash on delivery</a></li>
+            <li><a href="javascript:;" onclick="findStockPoMain(this)"/>Payment to shipment</a></li>
+            <li><a href="javascript:;" onclick="findStockPoMain(this)"/>Prepayment to shipment</a></li>
+        </ul>
+    </div>
+</div>
+<div id="stockPoTab" class="tabson" style="margin-left: 200px">
+    <table class="tablelist">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>purchase order id</th>
+            <th>creating time</th>
+            <th>vender id</th>
+            <th>creator</th>
+            <th>fee</th>
+            <th>purchased product price</th>
+            <th>purchase order price</th>
+            <th>pay type</th>
+            <th>min pre-payment</th>
+            <th>status</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="poStockTableBody">
+
+        <div>
+            <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+        </div>
+
+        <script id="poStockListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showStockPoDetails(this)">{{$value.poId}}</a></td>
+                <td>{{$value.createTime}}</td>
+                <td>{{$value.venderCode}}</td>
+                <td>{{$value.account}}</td>
+                <td>{{$value.tipFee}}</td>
+                <td>{{$value.productTotal}}</td>
+                <td>{{$value.poTotal}}</td>
+                <td>{{$value.payType}}</td>
+                <td>{{$value.prePayFee}}</td>
+                <td>{{$value.status}}</td>
+                <!--                <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>修改</a><a href="javascript:;" onclick="deleteUser('{{$value.account}}')">删除</a></td>-->
+                <td><a href="javascript:;" onclick="stockPoMain(this)"/>入库登记</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+
+
+
+</div>
+
+<div id="stockDetails">
+    <table class="tablelist" id="detailTable" style="width: 80%;margin-left: 200px">
+        <tbody id="poStockItemsTableBody"></tbody>
+        <script id="poStockItemsListTemplate" type="text/html">
+            <tr>
+                <td>purchase order id</td>
+                <td><input type="text" value="{{data.poId}}" id="poId" class="poinput" readonly/> <span>*</span></td>
+                <td>creating time</td>
+                <td><input type="text" value="{{data.createTime}}" id="poTime" class="poinput" readonly/> <span>*</span>
+                </td>
+                <td>vender</td>
+                <td>
+                    <select id="selVen">
+                        <option value="{{data.venderCode}}">{{data.venderName}}</option>
+                    </select><span>*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>creator</td>
+                <td><input type="text" value="{{data.account}}" id="poAccount" readonly class="poinput"/> <span>*</span>
+                </td>
+                <td>fee</td>
+                <td><input type="text" value="{{data.tipFee}}" id="poTipFee" class="poinput" readonly/> <span>*</span></td>
+                <td>purchase price total</td>
+                <td><input type="text" value="{{data.productTotal}}" id="poProductTotal" class="poinput" readonly/>
+                    <span>*</span></td>
+            </tr>
+            <tr>
+                <td>pay type</td>
+                <td><select class="poinput" id="payType" onchange="changeFee()" onload="setDefault()">
+                    <option id="defaultType">{{data.payType}}</option>
+                </select> <span>*</span></td>
+                <td>min pre-payment/td>
+                <td><input type="text" value="{{data.prePayFee}}" id="poPrePayFee" class="poinput" id="prePayFee"
+                           readonly/> <span>*</span></td>
+                <td>ps</td>
+                <td><input type="text" value="{{data.remark}}" id="poRemark" class="poinput" readonly/></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <table class="tablelist itemlist" style="width: 100%">
+                        <tr>
+                            <th>no</th>
+                            <th>product id</th>
+                            <th>product name</th>
+                            <th>unit price</th>
+                            <th>unit</th>
+                            <th>num</th>
+                            <th>in total</th>
+                        </tr>
+                        <tbody id="itemList111">
+                        {{each data.poItems}}
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td><input type="text" name="productCode" class="poinput" value="{{$value.productCode}}"
+                                       readonly/></td>
+                            <td><input type="text" name="productName" class="poinput" value="{{$value.productName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitPrice" class="poinput" value="{{$value.unitPrice}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitName" class="poinput" value="{{$value.unitName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="num" class="poinput" value="{{$value.num}}"
+                                       readonly/></td>
+                            <td><input type="text" name="itemPrice" class="poinput" value="{{$value.itemPrice}}"
+                                       readonly/></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </script>
+
+    </table>
+
+</div>
+
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/findStockPoByPayType',
+            templateId: 'poStockListTemplate',
+            contentId: 'poStockTableBody',
+            params:{
+                payType: "货到付款",
+                account: $('#accountIn').text()
+            }
+        })
+    })
+
+    function showStockPoDetails(obj) {
+        var p = obj.innerText;
+        $('#stockPoTab').hide();
+        hiddenDiv();
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/items',
+            templateId: 'poStockItemsListTemplate',
+            contentId: 'poStockItemsTableBody',
+            params: {
+                poId: p
+            }
+        })
+    }
+</script>

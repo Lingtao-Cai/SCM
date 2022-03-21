@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aowin.scm.dao.CustomerDao">
+    <select id="findAllCustomer" resultType="Customer">
+        select * from customer
+    </select>
+
+    <select id="findAll" resultType="Customer">
+        select * from customer limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from customer
+    </select>
+
+    <select id="findCustomerByCode" parameterType="java.lang.String" resultType="Customer">
+        select * from customer where customerCode=#{customerCode}
+    </select>
+
+    <insert id="addCustomer" parameterType="Customer">
+        insert into customer (customerCode,name,password,contactor,address,postcode,tel,fax,createDate)
+        values (#{customerCode},#{name},#{password},#{contactor},#{address},#{postcode},#{tel},#{fax},#{createDate})
+    </insert>
+
+    <delete id="removeCustomer" parameterType="java.lang.String">
+        delete from customer where customerCode=#{customerCode}
+    </delete>
+
+    <update id="updateCustomer" parameterType="Customer">
+        update customer set name=#{name},password=#{password},contactor=#{contactor},address=#{address},
+                          postcode=#{postcode},tel=#{tel},fax=#{fax},createDate=#{createDate} where customerCode=#{customerCode}
+    </update>
+
+    <select id="searchCustomer" resultType="Customer">
+        select * from customer
+        <where>
+            <if test="customerCode != null">
+                and customerCode like concat('%',#{customerCode},'%')
+            </if>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="contactor != null">
+                and contactor like concat('%',#{contactor},'%')
+            </if>
+            <if test="address != null">
+                and address like concat('%',#{address},'%')
+            </if>
+            <if test="postcode != null">
+                and postcode like concat('%',#{postcode},'%')
+            </if>
+            <if test="tel != null">
+                and tel like concat('%',#{tel},'%')
+            </if>
+            <if test="fax != null">
+                and fax like concat('%',#{fax},'%')
+            </if>
+            <if test="createDate != null">
+                and createDate like concat('%',#{createDate},'%')
+            </if>
+        </where>
+        limit #{first},#{max}
+    </select>
+
+    <select id="countAllResults" resultType="int">
+        select count(*) from customer
+        <where>
+            <if test="customerCode != null">
+                and customerCode like concat('%',#{customerCode},'%')
+            </if>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="contactor != null">
+                and contactor like concat('%',#{contactor},'%')
+            </if>
+            <if test="address != null">
+                and address like concat('%',#{address},'%')
+            </if>
+            <if test="postcode != null">
+                and postcode like concat('%',#{postcode},'%')
+            </if>
+            <if test="tel != null">
+                and tel like concat('%',#{tel},'%')
+            </if>
+            <if test="fax != null">
+                and fax like concat('%',#{fax},'%')
+            </if>
+            <if test="createDate != null">
+                and createDate like concat('%',#{createDate},'%')
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

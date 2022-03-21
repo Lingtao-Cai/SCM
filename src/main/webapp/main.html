@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="./libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./css/reset.css" rel="stylesheet" type="text/css" />
+    <script src="./js/jq.js"></script>
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-paginator.js"></script>
+    <script src="./js/art.js"></script>
+    <script src="./libs/layer/layer.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/user.js"></script>
+    <script src="./js/category.js"></script>
+    <script src="./js/product.js"></script>
+    <script src="./js/vender.js"></script>
+    <script src="./js/productDiv.js"></script>
+    <script src="js/soMain.js"></script>
+    <script src="./js/customer.js"></script>
+    <script src="./js/stock.js"></script>
+    <script src="./js/poMain.js"></script>
+    <script src="./js/bill.js"></script>
+    <script type="text/javascript" src="./js/laydate/laydate.js"></script>
+</head>
+
+<body>
+    <div id="top">
+        <div class="topleft"style="background: url(images/topbg.gif) repeat-x;width:100%">
+            <a href="main.html" target="_parent"><img src="images/logo.png" title="home page" /></a>
+        </div>
+
+        <div class="topright" style="position: absolute; margin-left: 1365px">
+
+            <div class="user">
+                <span class="in" id="accountIn"></span>
+
+                <span class="out">time：<span class="time"></span></span>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var date;
+            function now(){
+                date = new Date().toLocaleString();
+                $(".user .time").text(date);
+            }
+            setInterval("now()",1000);
+        </script>
+    </div>
+
+
+
+<div id="left" style="background: #f0f9fd;float: left;position: absolute;margin-top: 90px">
+    <div class="lefttop">
+        <span></span>menu
+    </div>
+
+    <dl class="leftmenu">
+
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>information
+            </div>
+            <ul class="menuson">
+                <li class="active"><cite></cite><a href="main.html"
+                                                   target="rightFrame">home</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('userList.html')">user management</a><i></i></li>
+                <li><cite></cite><a href="entry.html" target="_parent">exit</a><i></i></li>
+            </ul>
+        </dd>
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>product
+            </div>
+            <ul class="menuson">
+                <li><cite></cite></cite><a href="javascript:;" onclick="show('category.html')" >product type</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('product.html')" >product list</a><i></i></li>
+            </ul>
+        </dd>
+
+
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>purchase
+            </div>
+            <ul class="menuson">
+                <li><cite></cite><a href="javascript:;" onclick="show('vender.html')" >vender management</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('poList.html')">add purchase order</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('endPo.html')">end order</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('queryPo.html')">search</a><i></i></li>
+            </ul>
+        </dd>
+
+
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>stock management
+            </div>
+            <ul class="menuson">
+                <li><cite></cite><a href="javascript:;" onclick="show('stockList.html')">In stock</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('stockOutList.html')">Out stock</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('searchStock.html')">Stock search</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('checkStock.html')">Stock counting</a><i></i></li>
+            </ul>
+
+        </dd>
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>Sale
+            </div>
+            <ul class="menuson">
+                <li><cite></cite><a href="javascript:;" onclick="show('customer.html')" >Customer</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('soList.html')">Add sale order</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('endSo.html')">End sale order</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('querySo.html')">Search sale order</a><i></i></li>
+            </ul>
+
+        </dd>
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>Finance
+            </div>
+            <ul class="menuson">
+                <li><cite></cite><a href="javascript:;" onclick="show('income.html')">Receive records</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('outcome.html')">Payment records</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('searchBill.html')">Search records</a><i></i></li>
+            </ul>
+
+        </dd>
+        <dd>
+            <div class="title">
+                <span><img src="images/leftico01.png" /></span>Monthly report
+            </div>
+            <ul class="menuson">
+                <li><cite></cite><a href="javascript:;" onclick="show('poReport.html')">Monthly purchase report</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('soReport.html')">Monthly sale report</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('stockOutReport.html')">Monthly out-stock report</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('stockInReport.html')">Monthly in-stock report</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('productReport.html')">Monthly stock report</a><i></i></li>
+                <li><cite></cite><a href="javascript:;" onclick="show('billReport.html')">Monthly finance report</a><i></i></li>
+            </ul>
+
+        </dd>
+
+    </dl>
+
+    <script type="text/javascript">
+        $(function() {
+            var params = location.search.substr(1);
+            var arr = params.split('=');
+            document.getElementById('accountIn').innerText=arr[1];
+            // $('#accountIn').innerText.value(arr[1]);
+            //导航切换
+            $(".menuson li").click(function() {
+                $(".menuson li.active").removeClass("active")
+                $(this).addClass("active");
+            });
+
+            $('.title').click(function() {
+                var $ul = $(this).next('ul');
+                $('dd').find('ul').slideUp();
+                if ($ul.is(':visible')) {
+                    $(this).next('ul').slideUp();
+                } else {
+                    $(this).next('ul').slideDown();
+                }
+            });
+        })
+    </script>
+</div>
+
+<div id="right">
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<div style="margin-left: 200px">
+    <div class="place">
+        <span>At：</span>
+        <ul class="placeul">
+            <li>Finance management</li>
+            <li>payment</li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+        <div class="itab" href="#tab">
+            <ul>
+                <li><a href="javascript:;" onclick="showOutcomerPoMain(this)">Cash on delivery</a></li>
+                <li><a href="javascript:;" onclick="showOutcomerPoMain(this)">Payment to shipment</a></li>
+                <li><a href="javascript:;" onclick="showOutcomerPoMain(this)">Prepayment to shipment</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="tab" class="tabson">
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th>No<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+                <th>order number</th>
+                <th>date</th>
+                <th>vender</th>
+                <th>creator</th>
+                <th>fee</th>
+                <th>product sum</th>
+                <th>order sum</th>
+                <th>pay type</th>
+                <th>min payment</th>
+                <th>status</th>
+                <th>opt</th>
+            </tr>
+            </thead>
+            <tbody id="outcomeTableBody">
+            <script id="outcomeListTemplate" type="text/html">
+                {{each data}}
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td>{{$value.poId}}</td>
+                    <td>{{$value.createTime}}</td>
+                    <td>{{$value.venderCode}}</td>
+                    <td>{{$value.account}}</td>
+                    <td>{{$value.tipFee}}</td>
+                    <td>{{$value.productTotal}}</td>
+                    <td>{{$value.poTotal}}</td>
+                    <td>{{$value.payType}}</td>
+                    <td>{{$value.prePayFee}}</td>
+                    <td>{{$value.status}}</td>
+                    <td><a href="javascript:;" onclick="outcomeMoney(this)"/>register</a></td>
+                </tr>
+                {{/each}}
+            </script>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/findOutcomeSoMain',
+            templateId: 'outcomeListTemplate',
+            contentId: 'outcomeTableBody',
+            params:{
+                payType: "货到付款",
+                account: $('#accountIn').text()
+            }
+        })
+    })
+</script>

@@ -1,0 +1,64 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="#">Product</a></li>
+        <li>Product list</li>
+    </ul>
+</div>
+
+<div class="rightinfo" style="margin-left: 200px">
+
+    <div class="tools">
+
+        <ul class="toolbar">
+            <li><a href="javascript:;" onclick="addCategory()"/><img src="../demo/images/t01.png" />add</a></li>
+        </ul>
+
+    </div>
+
+
+    <table class="tablelist">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>Category id</th>
+            <th>Category name</th>
+            <th>Description</th>
+            <th>operation</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+        <div>
+            <ul id="page" style="margin-left: 500px">page</ul>
+        </div>
+
+        <script id="categoryListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td>{{$value.categoryId}}</td>
+                <td>{{$value.name}}</td>
+                <td>{{$value.remark}}</td>
+<!--                <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>修改</a><a href="javascript:;" onclick="deleteUser('{{$value.account}}')">删除</a></td>-->
+                <td><a href="javascript:;" onclick="updateCategory(this)"/>update</a><a href="javascript:;" onclick="deleteCategory(this)">delete</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/categories',
+            templateId: 'categoryListTemplate',
+            contentId: 'tableBody',
+            params: {
+                id: 1
+            }
+        })
+    })
+</script>

@@ -1,0 +1,77 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="#">Customer</a></li>
+        <li>Customer list</li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+
+    <div class="tools">
+
+        <ul class="toolbar" style="margin-left: 200px">
+            <li><a href="javascript:;" onclick="addCustomer()"/><img src="../demo/images/t01.png"/>添加</a></li>
+        </ul>
+        Customer number<input id="cCodeSearch"> name<input id="cNameSearch"> Contact<input id="cContactorSearch"> tel<input id="cTelSearch">
+        <input type="button" value="search" onclick="searchCustomer()">
+
+    </div>
+
+
+    <table class="tablelist" style="width: 80%;margin-left: 200px">
+        <thead>
+        <tr>
+            <th>No<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>Customer number</th>
+            <th>Customer name</th>
+            <th>Contact</th>
+            <th>address</th>
+            <th>post code</th>
+            <th>register date</th>
+            <th>tel</th>
+            <th>fax</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="customerTableBody">
+        <script id="customerListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td>{{$value.customerCode}}</td>
+                <td>{{$value.name}}</td>
+                <td>{{$value.contactor}}</td>
+                <td>{{$value.address}}</td>
+                <td>{{$value.postcode}}</td>
+                <td>{{$value.createDate}}</td>
+                <td>{{$value.tel}}</td>
+                <td>{{$value.fax}}</td>
+                <!--                <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>修改</a><a href="javascript:;" onclick="deleteUser('{{$value.account}}')">删除</a></td>-->
+                <td><a href="javascript:;" onclick="updateCustomer(this)"/>fix</a><a href="javascript:;" onclick="deleteCustomer(this)">del</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        <div>
+            <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+        </div>
+
+        </tbody>
+    </table>
+
+</div>
+
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/customers',
+            templateId: 'customerListTemplate',
+            contentId: 'customerTableBody'
+        })
+    })
+
+</script>

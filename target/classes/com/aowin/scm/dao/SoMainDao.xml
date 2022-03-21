@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aowin.scm.dao.SoMainDao">
+    <resultMap id="resultMap1" type="SoMain">
+        <id property="soId" column="mSOID"></id>
+        <result property="customerCode" column="CustomerCode"></result>
+        <result property="account" column="Account"></result>
+        <result property="createTime" column="CreateTime"></result>
+        <result property="tipFee" column="TipFee"></result>
+        <result property="productTotal" column="ProductTotal"></result>
+        <result property="soTotal" column="SOTotal"></result>
+        <result property="payType" column="PayType"></result>
+        <result property="prePayFee" column="PrePayFee"></result>
+        <result property="status" column="Status"></result>
+        <result property="remark" column="Remark"></result>
+        <result property="customerName" column="cName"></result>
+
+        <collection property="soItems" column="soId" ofType="SoItem">
+            <id property="soId" column="iSOID"></id>
+            <id property="productCode" column="ProductCode"></id>
+            <result property="unitPrice" column="UnitPrice"></result>
+            <result property="num" column="Num"></result>
+            <result property="unitName" column="UnitName"></result>
+            <result property="itemPrice" column="ItemPrice"></result>
+            <result property="productName" column="pName"></result>
+        </collection>
+    </resultMap>
+
+
+    <select id="findAll" resultType="SoMain">
+        select * from somain where Account=#{account} limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int" parameterType="java.lang.String">
+        select count(*) from somain where Account=#{account}
+    </select>
+
+
+    <select id="findBySoId" parameterType="java.math.BigDecimal" resultMap="resultMap1">
+        select main.SOID as mSOID,main.CustomerCode,main.Account,main.CreateTime,main.TipFee,main.ProductTotal,main.SOTotal,main.PayType,
+               main.PrePayFee,main.Status,main.Remark,item.ProductCode,
+               item.SOID as iSOID,item.UnitPrice,item.Num,item.UnitName,item.ItemPrice,c.Name as cName, p.Name as pName
+        from product as p,somain as main inner join soitem item on main.SOID = item.SOID inner join customer c on main.customerCode = c.customerCode
+        where main.SOID = #{soId} and p.productCode = item.productCode
+    </select>
+
+    <update id="updateSoMain" parameterType="SoMain">
+        update somain set customerCode=#{customerCode},Account=#{account},CreateTime=#{createTime},TipFee=#{tipFee},ProductTotal=#{productTotal},SOTotal=#{soTotal},PayType=#{payType},
+                          PrePayFee=#{prePayFee},Remark=#{remark} where SOID=#{soId}
+    </update>
+
+    <delete id="removeSoMain" parameterType="java.math.BigDecimal">
+        delete from somain where soId=#{soId}
+    </delete>
+
+    <select id="findBySoPayType" parameterType="SoMain" resultType="SoMain">
+        select * from somain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='3'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='2'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status='3'
+        </if>
+    </select>
+
+    <update id="endSoMain" parameterType="SoMain">
+        update somain set status = 4, endUser=#{endUser},endTime=#{endTime} where soId=#{soId}
+    </update>
+
+    <insert id="addSoMain" parameterType="SoMain">
+        insert into somain (soId,customerCode,account,createTime,tipFee,productTotal,soTotal,payType,prePayFee,status,remark)
+        values (#{soId},#{customerCode},#{account},#{createTime},#{tipFee},#{productTotal},#{soTotal},#{payType},#{prePayFee},'1',#{remark})
+    </insert>
+
+    <select id="queryByConditions" resultType="SoMain">
+        select soId,somain.customerCode,account,createTime,tipFee,productTotal,soTotal,payType,prePayFee,status,remark,
+        c.name as customerName from somain inner join customer c on somain.customerCode = c.customerCode
+        <where>
+            <if test="soId != null">
+                and soId like concat('%',#{soId},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+            <if test="startDate != null and startDate != ''and endDate != null and endDate != ''">
+                and date(createTime) between #{startDate} and #{endDate}
+            </if>
+        </where>
+        limit #{first},#{max}
+    </select>
+
+    <select id="countAllByCondition" resultType="java.lang.Integer" parameterType="QueryCondition">
+        select count(*) from somain inner join customer on somain.customerCode = customer.customerCode
+        <where>
+            <if test="soId != null">
+                and soId like concat('%',#{soId},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+            <if test="startDate != null and startDate != ''and endDate != null and endDate != ''">
+                and date(createTime) between #{startDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findStockOutByPayType" parameterType="SoMain" resultType="SoMain">
+        select * from somain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='1'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='3'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status='5'
+        </if>
+    </select>
+
+    <update id="stockSoMain" parameterType="SoMain">
+        update somain set stockTime=#{stockTime},stockUser=#{stockUser},status='2' where soId=#{soId}
+    </update>
+
+    <select id="findIncomeSoMain" parameterType="SoMain" resultType="SoMain">
+        select * from somain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='2'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='1'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status in ('1','2')
+        </if>
+        limit #{first},#{max}
+    </select>
+
+    <select id="countIncomeSoMain" parameterType="SoMain" resultType="int">
+        select count(*) from somain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='2'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='1'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status in ('1','2')
+        </if>
+    </select>
+
+    <update id="receiveMoney" parameterType="SoMain">
+        update somain set
+        <if test="payType == '货到付款'">
+            payUser=#{payUser},payTime=#{payTime},status='3'
+        </if>
+        <if test="payType == '款到发货'">
+            payUser=#{payUser},payTime=#{payTime},status='3'
+        </if>
+        <if test="payType == '预付款到发货' and status == 1">
+            prepayUser=#{payUser},prepayTime=#{payTime},status='3'
+        </if>
+        <if test="payType == '预付款到发货' and status == 2">
+            payUser=#{payUser},payTime=#{payTime},status='3'
+        </if>
+        where soId = #{soId}
+    </update>
+
+    <select id="findSoByMonth" resultType="SoMain" parameterType="DateRange">
+        select soId,somain.customerCode,account,createTime,tipFee,productTotal,soTotal,payType,prePayFee,status,remark,stockTime,stockUser,payTime,payUser,prePayTime,prePayUser,endTime,endUser,
+            c.name as customerName from somain inner join customer as c on somain.customerCode = c.customerCode where date(somain.createTime) between #{startDate} and #{endDate}
+    </select>
+
+
+
+</mapper>

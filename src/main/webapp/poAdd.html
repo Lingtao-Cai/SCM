@@ -1,0 +1,130 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="poList.html">Purchase</a></li>
+        <li>addPurchase</li>
+    </ul>
+</div>
+
+<div id="poDiv" class="rightinfo">
+    <div class="tools">
+        <ul class="toolbar" style="margin-left: 200px">
+            <li onclick="addItem()"><img src="../demo/images/t01.png"/>add details</li>
+            <li onclick="addPo()"><img src="../demo/images/t07.png"/>save</li>
+        </ul>
+
+    </div>
+
+
+    <table class="tablelist" id="detailTable" style="width: 80%;margin-left: 200px">
+            <tr>
+                <td>purchase num</td>
+                <td><input type="text" id="poId" class="poinput" readonly/> <span>*</span></td>
+                <td>time</td>
+                <td><input type="text" id="poTime" class="poinput" readonly/> <span>*</span>
+                </td>
+                <td>vender</td>
+                <td>
+                    <select id="selVen">
+                    </select><span>*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>creator</td>
+                <td><input type="text" id="poAccount" readonly class="poinput"/> <span>*</span>
+                </td>
+                <td>fee</td>
+                <td><input type="text" id="poTipFee" value="0" class="poinput"/> <span>*</span></td>
+                <td>sum</td>
+                <td><input type="text" id="poProductTotal" class="poinput" readonly/>
+                    <span>*</span></td>
+            </tr>
+            <tr>
+                <td>pay type</td>
+                <td><select class="poinput" id="payType" onchange="changeFee()" >
+                    <option value="1">Cash on delivery</option>
+                    <option value="2">Payment to shipment</option>
+                    <option value="3">Prepayment to shipment</option>
+                </select> <span>*</span></td>
+                <td>min payment</td>
+                <td><input type="text" id="poPrePayFee" value="0" class="poinput" id="prePayFee"
+                           readonly/> <span>*</span></td>
+                <td>ps</td>
+                <td><input type="text" id="poRemark" class="poinput"/></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <table class="tablelist itemlist" style="width: 100%">
+                        <tr>
+                            <th>no</th>
+                            <th>product no</th>
+                            <th>product name</th>
+                            <th>price</th>
+                            <th>unit</th>
+                            <th>num</th>
+                            <th>sum</th>
+                            <th>opt</th>
+                        </tr>
+                        <tbody id="itemList111">
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+    </table>
+
+</div>
+
+<div id="productDiv" class="rightinfo" style="display:none;width: 80%;margin-left: 200px">
+    <div class="tools">
+        <ul class="toolbar">
+            <li onclick="sure()"><span><img src="../demo/images/t06.png"/></span>yes</li>
+            <li onclick="hiddenDiv()"><span><img src="../demo/images/t03.png"/></span>no</li>
+        </ul>
+    </div>
+    <table class="tablelist" id="spxxTable">
+        <tr>
+            <td>choice</td>
+            <td>product id</td>
+            <td>product name</td>
+            <td>unit price</td>
+            <td>unit</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        //var p = obj.innerText;
+        $(function () {
+            let id = new Date().getFullYear() + '' + (new Date().getMonth() + 1) + '' + new Date().getDate() + '' + new Date().getHours() + '' +new Date().getMinutes();
+            $('#poId').attr('value', id);
+            let date = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
+            $('#poTime').attr('value', date);
+
+            $('#poAccount').attr('value',$('#accountIn').text())
+            Ajax.post('/findAllVender', {}, function (result) {
+                $(result.data).each(function () {
+                    $('#selVen').append("<option value="+this.venderCode+">" + this.name + "</option>");
+                })
+            })
+
+            Ajax.post('/findAllProduct', {}, function (result) {
+                $(result.data).each(function () {
+                    var tr = $('<tr></tr>');
+                    $('#spxxTable').append(tr);
+                    tr.append(
+                        '<td><input type="radio" name="choice"/></td>'
+                        + '<td>' + this.productCode + '</td>'
+                        + '<td>' + this.name + '</td>'
+                        + '<td>' + this.price + '</td>'
+                        + '<td>' + this.unitName + '</td>'
+                    )
+                })
+
+            })
+        })
+    })
+
+</script>
+

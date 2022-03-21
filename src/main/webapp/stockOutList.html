@@ -1,0 +1,178 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li>stock management</li>
+        <li>in stock</li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+    <div class="itab" href="#tab">
+        <ul>
+            <li><a href="javascript:;" onclick="findStockOut(this)"/>cash on delivery</a></li>
+            <li><a href="javascript:;" onclick="findStockOut(this)"/>Payment to shipment</a></li>
+            <li><a href="javascript:;" onclick="findStockOut(this)"/>Prepayment to shipment</a></li>
+        </ul>
+    </div>
+</div>
+<div id="stockOutTab" class="tabson" style="margin-left: 200px">
+    <table class="tablelist">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>sale order id</th>
+            <th>creating time</th>
+            <th>customer id</th>
+            <th>creator</th>
+            <th>fee</th>
+            <th>product sum</th>
+            <th>order sum</th>
+            <th>pay type</th>
+            <th>min pre-payment</th>
+            <th>status</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="soStockOutTableBody">
+
+        <div>
+            <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">分页</ul>
+        </div>
+
+        <script id="soStockOutListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showStockSoOutDetails(this)">{{$value.soId}}</a></td>
+                <td>{{$value.createTime}}</td>
+                <td>{{$value.customerCode}}</td>
+                <td>{{$value.account}}</td>
+                <td>{{$value.tipFee}}</td>
+                <td>{{$value.productTotal}}</td>
+                <td>{{$value.poTotal}}</td>
+                <td>{{$value.payType}}</td>
+                <td>{{$value.prePayFee}}</td>
+                <td>{{$value.status}}</td>
+                <!--                <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>修改</a><a href="javascript:;" onclick="deleteUser('{{$value.account}}')">删除</a></td>-->
+                <td><a href="javascript:;" onclick="stockSoMain(this)"/>出库登记</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+
+
+
+</div>
+
+<div id="stockOutDetails">
+    <table class="tablelist" id="detailTable" style="width: 80%;margin-left: 200px">
+        <tbody id="soStockItemsTableBody"></tbody>
+        <script id="soStockItemsListTemplate" type="text/html">
+            <tr>
+                <td>sale order id</td>
+                <td><input type="text" value="{{data.soId}}" id="soId" class="poinput" readonly/> <span>*</span></td>
+                <td>creating time</td>
+                <td><input type="text" value="{{data.createTime}}" id="soTime" class="poinput" readonly/> <span>*</span>
+                </td>
+                <td>customer name</td>
+                <td>
+                    <select id="selCustomer">
+                        <option value="{{data.customerCode}}">{{data.customerName}}</option>
+                    </select><span>*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>creator</td>
+                <td><input type="text" value="{{data.account}}" id="soAccount" readonly class="poinput"/> <span>*</span>
+                </td>
+                <td>fee</td>
+                <td><input type="text" value="{{data.tipFee}}" id="soTipFee" class="poinput" readonly/> <span>*</span></td>
+                <td>total sale price</td>
+                <td><input type="text" value="{{data.productTotal}}" id="soProductTotal" class="poinput" readonly/>
+                    <span>*</span></td>
+            </tr>
+            <tr>
+                <td>pay type</td>
+                <td><select class="poinput" id="payType" onchange="changeFee()" onload="setDefault()">
+                    <option id="defaultType">{{data.payType}}</option>
+                </select> <span>*</span></td>
+                <td>min pre-payment</td>
+                <td><input type="text" value="{{data.prePayFee}}" id="poPrePayFee" class="poinput" id="prePayFee"
+                           readonly/> <span>*</span></td>
+                <td>ps</td>
+                <td><input type="text" value="{{data.remark}}" id="poRemark" class="poinput" readonly/></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <table class="tablelist itemlist" style="width: 100%">
+                        <tr>
+                            <th>no</th>
+                            <th>product id</th>
+                            <th>product name</th>
+                            <th>unit price</th>
+                            <th>unit</th>
+                            <th>num</th>
+                            <th>total</th>
+                        </tr>
+                        <tbody id="itemList111">
+                        {{each data.soItems}}
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td><input type="text" name="productCode" class="soinput" value="{{$value.productCode}}"
+                                       readonly/></td>
+                            <td><input type="text" name="productName" class="soinput" value="{{$value.productName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitPrice" class="soinput" value="{{$value.unitPrice}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitName" class="soinput" value="{{$value.unitName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="num" class="soinput" value="{{$value.num}}"
+                                       readonly/></td>
+                            <td><input type="text" name="itemPrice" class="soinput" value="{{$value.itemPrice}}"
+                                       readonly/></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </script>
+
+    </table>
+
+</div>
+
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/findStockOutByPayType',
+            templateId: 'soStockOutListTemplate',
+            contentId: 'soStockOutTableBody',
+            params:{
+                payType: "货到付款",
+                account: $('#accountIn').text()
+            }
+        })
+    })
+
+    function showStockSoOutDetails(obj) {
+        var p = obj.innerText;
+        $('#stockOutTab').hide();
+        $('#stockOutDetails').show();
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/soItems',
+            templateId: 'soStockItemsListTemplate',
+            contentId: 'soStockItemsTableBody',
+            params: {
+                soId: p
+            }
+        })
+    }
+</script>

@@ -1,0 +1,87 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li>report</li>
+        <li>Monthly purchase report</li>
+    </ul>
+</div>
+
+<div class="formbody" style="margin-left: 200px">
+    <form>
+        <ul class="seachform">
+
+            <li>
+                <label>date</label>
+                <input type="text" name="" class="scinput" id="poTime" placeholder="choose date"/>
+            </li>
+
+
+
+            <li><label>&nbsp;</label><a href="javascript:;" onclick="searchPoByMonth()">search</a></li>
+
+        </ul>
+    </form>
+
+    <!-- 主信息 -->
+    <table class="tablelist">
+        <tr>
+            <th>order num</th>
+            <th>end num</th>
+            <th>income sum</th>
+            <th>outcome sum</th>
+        </tr>
+        <tr>
+            <td id="poNumTotal"></td>
+            <td id="poEndNum"></td>
+            <td id="poTotalPrice"></td>
+            <td id="poPaidTotal"></td>
+        </tr>
+        </script>
+    </table>
+
+    <table class="tablelist" style="margin-top:20px">
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>purchase id</th>
+            <th>vender id</th>
+            <th>vender name</th>
+            <th>date</th>
+            <th>user</th>
+            <th>sum</th>
+            <th>unpaid amount</th>
+            <th>status</th>
+        </tr>
+        <tbody id="poReportItemsTableBody">
+        <script id="poReportItemsListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showStockInDetails(this)">{{$value.poId}}</a></td>
+                <td>{{$value.venderCode}}</td>
+                <td>{{$value.venderName}}</td>
+                <td>{{$value.createTime}}</td>
+                <td>{{$value.account}}</td>
+                <td>{{$value.poTotal}}</td>
+                <td>{{$value.unpaidFee}}</td>
+                <td>{{$value.status}}</td>
+            </tr>
+            {{/each}}
+        </script>
+        </tbody>
+    </table>
+
+</div>
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 250px;position: absolute"></ul>
+</div>
+
+<script type="text/javascript">
+    laydate.render({
+        elem: '#poTime',
+        type: 'month'
+    });
+
+
+
+</script>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aowin.scm.dao.CategoryDao">
+
+
+
+    <select id="findAll" resultType="com.aowin.scm.pojo.Category">
+        select * from category limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from category
+    </select>
+
+    <select id="findCategoryName" resultType="java.lang.String">
+        select Name from category
+    </select>
+
+    <select id="findCategoriesId" resultType="java.lang.String">
+        select category.CategoryID from category where Name = #{name}
+    </select>
+
+    <select id="getAllCategoryName" resultType="java.lang.String">
+        select category.Name from category
+    </select>
+
+    <insert id="addCategory" parameterType="Category">
+        insert into category (CategoryID, Name, Remark) values (#{categoryId}, #{name}, #{remark})
+    </insert>
+
+    <update id="updateCategory" parameterType="com.aowin.scm.pojo.Category">
+        update category set Name = #{name}, Remark = #{remark} where CategoryID = #{categoryId}
+    </update>
+
+    <delete id="removeCategory" parameterType="java.lang.Integer">
+        delete from category where CategoryID = #{categoryId}
+    </delete>
+
+</mapper>

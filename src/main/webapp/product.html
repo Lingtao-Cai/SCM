@@ -1,0 +1,77 @@
+<div class="place">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="#">product</a></li>
+        <li><a href="#">list</a></li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+
+    <div class="tools">
+
+        <ul class="toolbar" style="margin-left: 200px">
+            <li><a href="javascript:;" onclick="addProduct()"/><img src="../demo/images/t01.png" />add</a></li>
+        </ul>
+
+    </div>
+
+
+    <table class="tablelist" style="width: 80%;margin-left: 200px">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>product id</th>
+            <th>type</th>
+            <th>name</th>
+            <th>unit</th>
+            <th>price</th>
+            <th>added date</th>
+            <th>description</th>
+            <th>stock</th>
+            <th>in transit</th>
+            <th>sold to send</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="productTableBody">
+        <div>
+            <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+        </div>
+
+        <script id="productListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td>{{$value.productCode}}</td>
+                <td>{{$value.categoryName}}</td>
+                <td>{{$value.name}}</td>
+                <td>{{$value.unitName}}</td>
+                <td>{{$value.price}}</td>
+                <td>{{$value.createDate}}</td>
+                <td>{{$value.remark}}</td>
+                <td>{{$value.num}}</td>
+                <td>{{$value.poNum}}</td>
+                <td>{{$value.soNum}}</td>
+                <td><a href="javascript:;" onclick="updateProduct(this)"/>update</a><a href="javascript:;" onclick="deleteProduct(this)">delete</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/products',
+            templateId: 'productListTemplate',
+            contentId: 'productTableBody'
+        })
+    })
+
+
+</script>

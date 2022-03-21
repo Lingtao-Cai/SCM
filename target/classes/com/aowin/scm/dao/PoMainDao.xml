@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aowin.scm.dao.PoMainDao">
+    <resultMap id="resultMap1" type="PoMain">
+        <id property="poId" column="mPOID"></id>
+        <result property="venderCode" column="VenderCode"></result>
+        <result property="account" column="Account"></result>
+        <result property="createTime" column="CreateTime"></result>
+        <result property="tipFee" column="TipFee"></result>
+        <result property="productTotal" column="ProductTotal"></result>
+        <result property="poTotal" column="POTotal"></result>
+        <result property="payType" column="PayType"></result>
+        <result property="prePayFee" column="PrePayFee"></result>
+        <result property="status" column="Status"></result>
+        <result property="remark" column="Remark"></result>
+        <result property="venderName" column="vName"></result>
+        
+        <collection property="poItems" column="poId" ofType="PoItem">
+            <id property="poId" column="iPOID"></id>
+            <id property="productCode" column="ProductCode"></id>
+            <result property="unitPrice" column="UnitPrice"></result>
+            <result property="num" column="Num"></result>
+            <result property="unitName" column="UnitName"></result>
+            <result property="itemPrice" column="ItemPrice"></result>
+            <result property="productName" column="pName"></result>
+        </collection>
+    </resultMap>
+
+
+    <select id="findAll" resultType="PoMain">
+        select * from pomain where Account=#{account} limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int" parameterType="java.lang.String">
+        select count(*) from pomain where Account=#{account}
+    </select>
+
+<!--    <select id="findByPoId" parameterType="java.math.BigDecimal" resultMap="resultMap1">-->
+<!--        select main.POID,main.VenderCode as mVCode,Account,CreateTime,TipFee,ProductTotal,POTotal,PayType,-->
+<!--               PrePayFee,Status,main.Remark,item.ProductCode iProductCode,item.UnitPrice,item.Num,item.UnitName,item.ItemPrice, v.Name as vName, p.Name as pName-->
+<!--        from product as p,pomain as main inner join poitem item on main.POID = item.POID inner join vender v on main.venderCode = v.venderCode-->
+<!--        where main.POID = #{poId}-->
+<!--    </select>-->
+
+    <select id="findByPoId" parameterType="java.math.BigDecimal" resultMap="resultMap1">
+        select main.POID as mPOID,main.VenderCode,main.Account,main.CreateTime,main.TipFee,main.ProductTotal,main.POTotal,main.PayType,
+               main.PrePayFee,main.Status,main.Remark,item.ProductCode,
+               item.POID as iPOID,item.UnitPrice,item.Num,item.UnitName,item.ItemPrice,v.Name as vName, p.Name as pName
+        from product as p,pomain as main inner join poitem item on main.POID = item.POID inner join vender v on main.venderCode = v.venderCode
+        where main.POID = #{poId} and p.productCode = item.productCode
+    </select>
+
+    <update id="updateMain" parameterType="PoMain">
+        update pomain set VenderCode=#{venderCode},Account=#{account},CreateTime=#{createTime},TipFee=#{tipFee},ProductTotal=#{productTotal},POTotal=#{poTotal},PayType=#{payType},
+                          PrePayFee=#{prePayFee},Remark=#{remark} where POID=#{poId}
+    </update>
+
+    <delete id="removePoMain" parameterType="java.math.BigDecimal">
+        delete from pomain where poId=#{poId}
+    </delete>
+
+    <select id="findByPayType" parameterType="PoMain" resultType="PoMain">
+        select * from pomain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='3'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='2'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status='3'
+        </if>
+    </select>
+
+    <update id="endPoMain" parameterType="PoMain">
+        update pomain set status = 4, endUser=#{endUser},endTime=#{endTime} where poId=#{poId}
+    </update>
+
+    <insert id="addPoMain" parameterType="PoMain">
+        insert into pomain (poId,venderCode,account,createTime,tipFee,productTotal,poTotal,payType,prePayFee,status,remark)
+        values (#{poId},#{venderCode},#{account},#{createTime},#{tipFee},#{productTotal},#{poTotal},#{payType},#{prePayFee},'1',#{remark})
+    </insert>
+
+    <select id="queryByConditions" resultType="PoMain">
+        select poId,pomain.venderCode,account,createTime,tipFee,productTotal,poTotal,payType,prePayFee,status,remark,
+         v.name as venderName from pomain inner join vender v on pomain.venderCode = v.venderCode
+        <where>
+            <if test="poId != null">
+                and poId like concat('%',#{poId},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+            <if test="startDate != null and startDate != ''and endDate != null and endDate != ''">
+                and date(createTime) between #{startDate} and #{endDate}
+            </if>
+        </where>
+        limit #{first},#{max}
+    </select>
+
+    <select id="countAllByCondition" resultType="java.lang.Integer" parameterType="QueryCondition">
+        select count(*) from pomain inner join vender on pomain.venderCode = vender.venderCode
+        <where>
+            <if test="poId != null">
+                and poId like concat('%',#{poId},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+            <if test="startDate != null and startDate != ''and endDate != null and endDate != ''">
+                and date(createTime) between #{startDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findStockPoByPayType" parameterType="PoMain" resultType="PoMain">
+        select * from pomain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='1'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='3'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status='5'
+        </if>
+    </select>
+
+    <update id="stockPoMain" parameterType="PoMain">
+        update pomain set stockTime=#{stockTime},stockUser=#{stockUser},status='2' where poId=#{poId}
+    </update>
+
+    <select id="findOutcomePoMain" parameterType="PoMain" resultType="PoMain">
+        select * from pomain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='2'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='1'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status in ('1','2')
+        </if>
+        limit #{first},#{max}
+    </select>
+
+    <select id="countOutcomePoMain" parameterType="PoMain" resultType="int">
+        select count(*) from Pomain where payType=#{payType} and account=#{account}
+        <if test="payType == '货到付款'" >
+            and status='2'
+        </if>
+        <if test="payType == '款到发货'" >
+            and status='1'
+        </if>
+        <if test="payType == '预付款到发货'" >
+            and status in ('1','2')
+        </if>
+    </select>
+
+    <update id="payMoney" parameterType="SoMain">
+        update pomain set
+        <if test="payType == '货到付款'">
+            payUser=#{payUser},payTime=#{payTime},status='3'
+        </if>
+        <if test="payType == '款到发货'">
+            payUser=#{payUser},payTime=#{payTime},status='3'
+        </if>
+        <if test="payType == '预付款到发货' and status == 1">
+            prepayUser=#{payUser},prepayTime=#{payTime},status='3'
+        </if>
+        <if test="payType == '预付款到发货' and status == 2">
+            payUser=#{payUser},payTime=#{payTime},status='3'
+        </if>
+        where poId = #{poId}
+    </update>
+
+
+    <select id="reportPoMainDetail" resultType="PoMain">
+        select poId,pomain.venderCode,account,createTime,tipFee,productTotal,poTotal,payType,prePayFee,status,remark,stockTime,stockUser,payTime,payUser,prePayTime,prePayUser,endTime,endUser,
+               v.name as venderName from pomain inner join vender as v on pomain.venderCode = v.venderCode where date(pomain.createTime) between #{startDate} and #{endDate} limit #{first},#{max}
+    </select>
+
+    <select id="countPoMainDetail" parameterType="DateRange" resultType="int">
+        select count(*) from pomain inner join vender as v on pomain.venderCode = v.venderCode where date(pomain.createTime) between #{startDate} and #{endDate}
+    </select>
+
+    <select id="findAllPoByMonth" resultType="PoMain">
+        select poId,pomain.venderCode,account,createTime,tipFee,productTotal,poTotal,payType,prePayFee,status,remark,stockTime,stockUser,payTime,payUser,prePayTime,prePayUser,endTime,endUser,
+               v.name as venderName from pomain inner join vender as v on pomain.venderCode = v.venderCode where date(pomain.createTime) between #{startDate} and #{endDate}
+    </select>
+
+
+
+</mapper>

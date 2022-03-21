@@ -1,0 +1,182 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li>purchase</li>
+        <li>endOrder</li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+    <div class="itab" href="#tab">
+        <ul>
+            <li><a href="javascript:;" onclick="findPoMain(this)"/>Cash on delivery</a></li>
+            <li><a href="javascript:;" onclick="findPoMain(this)"/>Payment to shipment</a></li>
+            <li><a href="javascript:;" onclick="findPoMain(this)"/>Prepayment to shipment</a></li>
+        </ul>
+    </div>
+</div>
+<div id="endTab" class="tabson" style="margin-left: 200px">
+    <table class="tablelist">
+        <thead>
+        <tr>
+            <th>No<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>Purchase order number</th>
+            <th>date</th>
+            <th>Vendor name</th>
+            <th>creator</th>
+            <th>extra fee</th>
+            <th>product sum</th>
+            <th>order sum</th>
+            <th>pay type</th>
+            <th>min payment</th>
+            <th>status</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="poEndTableBody">
+
+
+        <script id="poEndListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showEndPoDetails(this)">{{$value.poId}}</a></td>
+                <td>{{$value.createTime}}</td>
+                <td>{{$value.venderCode}}</td>
+                <td>{{$value.account}}</td>
+                <td>{{$value.tipFee}}</td>
+                <td>{{$value.productTotal}}</td>
+                <td>{{$value.poTotal}}</td>
+                <td>{{$value.payType}}</td>
+                <td>{{$value.prePayFee}}</td>
+                <td>{{$value.status}}</td>
+                <!--                <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>修改</a><a href="javascript:;" onclick="deleteUser('{{$value.account}}')">删除</a></td>-->
+                <td><a href="javascript:;" onclick="endPoMain(this)"/>了结</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+
+
+</div>
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">分页</ul>
+</div>
+
+<div>
+    <table class="tablelist" id="detailTable" style="width: 80%;margin-left: 200px">
+        <tbody id="poEndItemsTableBody"></tbody>
+        <script id="poEndItemsListTemplate" type="text/html">
+            <tr>
+                <td>采购单编号</td>
+                <td><input type="text" value="{{data.poId}}" id="poId" class="poinput" readonly/> <span>*</span></td>
+                <td>创建时间</td>
+                <td><input type="text" value="{{data.createTime}}" id="poTime" class="poinput" readonly/> <span>*</span>
+                </td>
+                <td>供应商</td>
+                <td>
+                    <select id="selVen">
+                        <option value="{{data.venderCode}}">{{data.venderName}}</option>
+                    </select><span>*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>创建用户</td>
+                <td><input type="text" value="{{data.account}}" id="poAccount" readonly class="poinput"/> <span>*</span>
+                </td>
+                <td>附加费用</td>
+                <td><input type="text" value="{{data.tipFee}}" id="poTipFee" class="poinput" readonly/> <span>*</span></td>
+                <td>采购产品总价</td>
+                <td><input type="text" value="{{data.productTotal}}" id="poProductTotal" class="poinput" readonly/>
+                    <span>*</span></td>
+            </tr>
+            <tr>
+                <td>付款方式</td>
+                <td><select class="poinput" id="payType" onchange="changeFee()" onload="setDefault()">
+                    <option id="defaultType">{{data.payType}}</option>
+                    <!--                    <option value="1">货到付款</option>-->
+                    <!--                    <option value="2">款到发货</option>-->
+                    <!--                    <option value="3">预付款到发货</option>-->
+                </select> <span>*</span></td>
+                <td>最低预付款金额</td>
+                <td><input type="text" value="{{data.prePayFee}}" id="poPrePayFee" class="poinput" id="prePayFee"
+                           readonly/> <span>*</span></td>
+                <td>备注</td>
+                <td><input type="text" value="{{data.remark}}" id="poRemark" class="poinput" readonly/></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <table class="tablelist itemlist" style="width: 100%">
+                        <tr>
+                            <th>序号</th>
+                            <th>产品编号</th>
+                            <th>产品名称</th>
+                            <th>采购单价</th>
+                            <th>数量单位</th>
+                            <th>产品数量</th>
+                            <th>采购总价</th>
+                        </tr>
+                        <tbody id="itemList111">
+                        {{each data.poItems}}
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td><input type="text" name="productCode" class="poinput" value="{{$value.productCode}}"
+                                       readonly/></td>
+                            <td><input type="text" name="productName" class="poinput" value="{{$value.productName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitPrice" class="poinput" value="{{$value.unitPrice}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitName" class="poinput" value="{{$value.unitName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="num" class="poinput" value="{{$value.num}}"
+                                       readonly/></td>
+                            <td><input type="text" name="itemPrice" class="poinput" value="{{$value.itemPrice}}"
+                                       readonly/></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </script>
+
+    </table>
+
+</div>
+
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/findByPayType',
+            templateId: 'poEndListTemplate',
+            contentId: 'poEndTableBody',
+            params:{
+                payType: "货到付款",
+                account: $('#accountIn').text()
+            }
+        })
+    })
+
+
+    function showEndPoDetails(obj) {
+        var p = obj.innerText;
+        $('#endTab').hide();
+        hiddenDiv();
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/items',
+            templateId: 'poEndItemsListTemplate',
+            contentId: 'poEndItemsTableBody',
+            params: {
+                poId: p
+            }
+        })
+    }
+</script>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>welcome!</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="./js/jq.js"></script>
+  <link href="css/style.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="js/cloud.js"></script>
+  <script src="./libs/layer/layer.js"></script>
+  <script src="./js/common.js"></script>
+  <script src="https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/js/s_super_index-855fcfd82e.js"></script>
+</head>
+
+<body style="background-color:#1c77ac; background-image:url(images/light.png); background-repeat:no-repeat; background-position:center top; overflow:hidden;">
+
+
+<div id="mainBody">
+  <div id="cloud1" class="cloud"></div>
+  <div id="cloud2" class="cloud"></div>
+</div>
+
+
+<div class="logintop">
+  <span>welcome</span>
+  <ul>
+    <li><a href="#">help</a></li>
+    <li><a href="#">about</a></li>
+  </ul>
+</div>
+
+<div class="loginbody">
+  <form>
+    <span class="systemlogo"></span>
+    <div class="loginbox">
+      <ul>
+        <li><input id="account" name="account" type="text" class="loginuser"></li>
+        <li><input id="password" name="password" type="password" class="loginpwd"/></li>
+        <li><input name="" type="button" class="loginbtn" value="login" onclick="login()"/>
+          <label><input name="" type="checkbox" value=""/>remember</label>
+          <label><a href="#">forgot password？</a></label>
+        </li>
+      </ul>
+    </div>
+  </form>
+</div>
+
+
+<div class="loginbm">版权所有 2018 aowin.com</div>
+
+<script language="javascript">
+  $(function () {
+    $('.loginbox').css({'position': 'absolute', 'left': ($(window).width() - 692) / 2});
+    $(window).resize(function () {
+      $('.loginbox').css({'position': 'absolute', 'left': ($(window).width() - 692) / 2});
+    })
+  });
+
+  //let u = document.getElementById("username")
+</script>
+<script>
+  function login() {
+    Ajax.post("/login", {account: $("#account").val(), password:$("#password").val()}, function (result) {
+      doResult(result, function () {
+        window.sessionStorage.setItem("token", result.token);
+        alert(result.msg);
+        document.location.href = 'main.html?account='+$('#account').val();
+        // if (result.code == 500) {
+        //   alert(result.msg)
+        // } else if (result.code == 401) {
+        //   alert(result.msg)
+        //   document.location.href = 'index.html'
+        // } else {
+        //   window.sessionStorage.setItem("token",result.token);
+        //   //
+        //   alert(result.msg)
+        //   //
+        //   document.location.href = 'main.html'
+        // }
+      })
+
+    })
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="#">purchase</a></li>
+        <li>add</li>
+    </ul>
+</div>
+<div id="up">
+    <div class="rightinfo">
+        <div class="tools">
+
+            <ul class="toolbar" style="margin-left: 200px">
+                <li></cite><a href="javascript:;" onclick="show('poAdd.html')"><img src="../demo/images/t01.png"/>add</a></li>
+            </ul>
+
+        </div>
+
+
+        <table class="tablelist" style="width: 80%;margin-left: 200px">
+            <thead>
+            <tr>
+                <th>no<span class="sort"><img src="../demo/images/px.gif"/></span></th>
+                <th>purchase id</th>
+                <th>vender id</th>
+                <th>user</th>
+                <th>date</th>
+                <th>fee</th>
+                <th>purchase sum</th>
+                <th>order sum</th>
+                <th>pay</th>
+                <th>min pre-payment</th>
+                <th>status</th>
+                <th>ps</th>
+                <th>opt</th>
+            </tr>
+            </thead>
+            <tbody id="poListTableBody">
+            <script id="poListTemplate" type="text/html">
+                {{each data}}
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td><a href="javascript:;" onclick="showDetails(this)">{{$value.poId}}</a></td>
+                    <td>{{$value.venderCode}}</td>
+                    <td>{{$value.account}}</td>
+                    <td>{{$value.createTime}}</td>
+                    <td>{{$value.tipFee}}</td>
+                    <td>{{$value.productTotal}}</td>
+                    <td>{{$value.poTotal}}</td>
+                    <td>{{$value.payType}}</td>
+                    <td>{{$value.prePayFee}}</td>
+                    <td>{{$value.status}}</td>
+                    <td>{{$value.remark}}</td>
+                    <td><a href="javascript:;" onclick="deletePoMain(this)">del</a></td>
+                </tr>
+                {{/each}}
+            </script>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div id="poDiv" class="rightinfo" style="display: none">
+    <div class="tools">
+        <ul class="toolbar" style="margin-left: 200px">
+            <li onclick="addItem()"><img src="../demo/images/t01.png"/>add</li>
+            <li onclick="savePo()"><img src="../demo/images/t07.png"/>save</li>
+        </ul>
+
+    </div>
+
+
+    <table class="tablelist" id="detailTable" style="width: 80%;margin-left: 200px">
+        <tbody id="poItemsTableBody"></tbody>
+        <script id="poItemsListTemplate" type="text/html">
+            <tr>
+                <td>purchase id</td>
+                <td><input type="text" value="{{data.poId}}" id="poId" class="poinput" readonly/> <span>*</span></td>
+                <td>date</td>
+                <td><input type="text" value="{{data.createTime}}" id="poTime" class="poinput" readonly/> <span>*</span>
+                </td>
+                <td>vender</td>
+                <td>
+                    <select id="selVen">
+                        <option value="{{data.venderCode}}">{{data.venderName}}</option>
+                    </select><span>*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>creator</td>
+                <td><input type="text" value="{{data.account}}" id="poAccount" readonly class="poinput"/> <span>*</span>
+                </td>
+                <td>fee</td>
+                <td><input type="text" value="{{data.tipFee}}" id="poTipFee" class="poinput"/> <span>*</span></td>
+                <td>sum</td>
+                <td><input type="text" value="{{data.productTotal}}" id="poProductTotal" class="poinput" readonly/>
+                    <span>*</span></td>
+            </tr>
+            <tr>
+                <td>pay</td>
+                <td><select class="poinput" id="payType" onchange="changeFee()" onload="setDefault()">
+                    <option id="defaultType">{{data.payType}}</option>
+                    <option value="1">Cash on delivery</option>
+                    <option value="2">Payment to shipment</option>
+                    <option value="3">Prepayment to shipment</option>
+                </select> <span>*</span></td>
+                <td>min pre-payment</td>
+                <td><input type="text" value="{{data.prePayFee}}" id="poPrePayFee" class="poinput" id="prePayFee"
+                           readonly/> <span>*</span></td>
+                <td>ps</td>
+                <td><input type="text" value="{{data.remark}}" id="poRemark" class="poinput"/></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <table class="tablelist itemlist" style="width: 100%">
+                        <tr>
+                            <th>no</th>
+                            <th>product Id</th>
+                            <th>product Name</th>
+                            <th>unit price</th>
+                            <th>unit</th>
+                            <th>num</th>
+                            <th>sum</th>
+                            <th>opt</th>
+                        </tr>
+                        <tbody id="itemList111">
+                        {{each data.poItems}}
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td><input type="text" name="productCode" class="poinput" value="{{$value.productCode}}"
+                                       readonly/> <img src="../demo/images/leftico03.png" class="point"
+                                                       onclick="choiceSpxx(this)"/></td>
+                            <td><input type="text" name="productName" class="poinput" value="{{$value.productName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitPrice" class="poinput" value="{{$value.unitPrice}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitName" class="poinput" value="{{$value.unitName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="num" class="poinput" value="{{$value.num}}"
+                                       onchange="updateItemPrice(this)"/></td>
+                            <td><input type="text" name="itemPrice" class="poinput" value="{{$value.itemPrice}}"
+                                       readonly/></td>
+                            <td><img src="../demo/images/delete.gif" class="point" onclick="delItem(this)"/></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </script>
+
+    </table>
+
+</div>
+
+
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+</div>
+
+<div id="productDiv" class="rightinfo" style="display:none;width: 80%;margin-left: 200px">
+    <div class="tools">
+        <ul class="toolbar">
+            <li onclick="sure()"><span><img src="../demo/images/t06.png"/></span>yes</li>
+            <li onclick="hiddenDiv()"><span><img src="../demo/images/t03.png"/></span>no</li>
+        </ul>
+    </div>
+    <table class="tablelist" id="spxxTable">
+        <tr>
+            <td>select</td>
+            <td>product id</td>
+            <td>product name</td>
+            <td>purchase unit price</td>
+            <td>unit</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/poLists',
+            templateId: 'poListTemplate',
+            contentId: 'poListTableBody'
+        })
+    })
+
+    function showDetails(obj) {
+        var p = obj.innerText;
+        $(function () {
+            Ajax.post('/findAllVender', {}, function (result) {
+                $(result.data).each(function () {
+                    $('#selVen').append("<option value="+this.venderCode+">" + this.name + "</option>");
+                })
+            })
+
+            Ajax.post('/findAllProduct', {}, function (result) {
+                $(result.data).each(function () {
+                    var tr = $('<tr></tr>');
+                    $('#spxxTable').append(tr);
+                    tr.append(
+                        '<td><input type="radio" name="choice"/></td>'
+                        + '<td>' + this.productCode + '</td>'
+                        + '<td>' + this.name + '</td>'
+                        + '<td>' + this.price + '</td>'
+                        + '<td>' + this.unitName + '</td>'
+                    )
+                })
+            })
+        })
+
+        $('#up').hide();
+        hiddenDiv();
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/items',
+            templateId: 'poItemsListTemplate',
+            contentId: 'poItemsTableBody',
+            params: {
+                poId: p
+            }
+        })
+
+    }
+
+
+</script>

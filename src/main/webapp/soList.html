@@ -1,0 +1,195 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="#">sale</a></li>
+        <li>add</li>
+    </ul>
+</div>
+<div id="soup">
+    <div class="rightinfo">
+        <div class="tools">
+
+            <ul class="toolbar" style="margin-left: 200px">
+                <li></cite><a href="javascript:;" onclick="show('soAdd.html')"><img src="../demo/images/t01.png"/>add</a></li>
+            </ul>
+
+        </div>
+
+
+        <table class="tablelist" style="width: 80%;margin-left: 200px">
+            <thead>
+            <tr>
+                <th>no<span class="sort"><img src="../demo/images/px.gif"/></span></th>
+                <th>sale order id</th>
+                <th>customer id</th>
+                <th>account</th>
+                <th>time</th>
+                <th>fee</th>
+                <th>sale sum</th>
+                <th>purchase sum</th>
+                <th>pay type</th>
+                <th>min pre-payment</th>
+                <th>status</th>
+                <th>ps</th>
+                <th>opt</th>
+            </tr>
+            </thead>
+            <tbody id="soListTableBody">
+            <script id="soListTemplate" type="text/html">
+                {{each data}}
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td><a href="javascript:;" onclick="showSoDetails(this)">{{$value.soId}}</a></td>
+                    <td>{{$value.customerCode}}</td>
+                    <td>{{$value.account}}</td>
+                    <td>{{$value.createTime}}</td>
+                    <td>{{$value.tipFee}}</td>
+                    <td>{{$value.productTotal}}</td>
+                    <td>{{$value.soTotal}}</td>
+                    <td>{{$value.payType}}</td>
+                    <td>{{$value.prePayFee}}</td>
+                    <td>{{$value.status}}</td>
+                    <td>{{$value.remark}}</td>
+                    <td><a href="javascript:;" onclick="deleteSoMain(this)">删除</a></td>
+                </tr>
+                {{/each}}
+            </script>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div id="soDiv" class="rightinfo" style="display: none">
+    <div class="tools">
+        <ul class="toolbar" style="margin-left: 200px">
+            <li onclick="addSoItem()"><img src="../demo/images/t01.png"/>add details</li>
+            <li onclick="saveSo()"><img src="../demo/images/t07.png"/>save</li>
+        </ul>
+
+    </div>
+
+
+    <table class="tablelist" id="detailTable" style="width: 80%;margin-left: 200px">
+        <tbody id="soItemsTableBody"></tbody>
+        <script id="soItemsListTemplate" type="text/html">
+            <tr>
+                <td>sale order id</td>
+                <td><input type="text" value="{{data.soId}}" id="soId" class="soinput" readonly/> <span>*</span></td>
+                <td>time</td>
+                <td><input type="text" value="{{data.createTime}}" id="soTime" class="soinput" readonly/> <span>*</span>
+                </td>
+                <td>customer name</td>
+                <td>
+                    <select id="soSelCus">
+                        <option value="{{data.customerCode}}">{{data.customerName}}</option>
+                    </select><span>*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>creator</td>
+                <td><input type="text" value="{{data.account}}" id="soAccount" readonly class="soinput"/> <span>*</span>
+                </td>
+                <td>fee</td>
+                <td><input type="text" value="{{data.tipFee}}" id="soTipFee" class="soinput"/> <span>*</span></td>
+                <td>sold price sum</td>
+                <td><input type="text" value="{{data.productTotal}}" id="soProductTotal" class="soinput" readonly/>
+                    <span>*</span></td>
+            </tr>
+            <tr>
+                <td>pay type</td>
+                <td><select class="soinput" id="soPayType" onchange="changeSoFee()" onload="setSoDefault()">
+                    <option id="defaultSoType">{{data.payType}}</option>
+                    <option value="1">Cash on delivery</option>
+                    <option value="2">Payment to shipment</option>
+                    <option value="3">Prepayment to shipment</option>
+                </select> <span>*</span></td>
+                <td>min pre-paymrnt</td>
+                <td><input type="text" value="{{data.prePayFee}}" id="soPrePayFee" class="soinput" id="prePayFee"
+                           readonly/> <span>*</span></td>
+                <td>ps</td>
+                <td><input type="text" value="{{data.remark}}" id="soRemark" class="soinput"/></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <table class="tablelist itemlist" style="width: 100%">
+                        <tr>
+                            <th>no</th>
+                            <th>product id</th>
+                            <th>product name</th>
+                            <th>unit price</th>
+                            <th>unit</th>
+                            <th>num</th>
+                            <th>sum</th>
+                            <th>opt</th>
+                        </tr>
+                        <tbody id="itemList222">
+                        {{each data.soItems}}
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td><input type="text" name="productCode" class="soinput" value="{{$value.productCode}}"
+                                       readonly/> <img src="../demo/images/leftico03.png" class="point"
+                                                       onclick="choiceSoSpxx(this)"/></td>
+                            <td><input type="text" name="productName" class="soinput" value="{{$value.productName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitPrice" class="soinput" value="{{$value.unitPrice}}"
+                                       readonly/></td>
+                            <td><input type="text" name="unitName" class="soinput" value="{{$value.unitName}}"
+                                       readonly/></td>
+                            <td><input type="text" name="num" class="soinput" value="{{$value.num}}"
+                                       onchange="updateSoItemPrice(this)"/></td>
+                            <td><input type="text" name="itemPrice" class="soinput" value="{{$value.itemPrice}}"
+                                       readonly/></td>
+                            <td><img src="../demo/images/delete.gif" class="soint" onclick="delItem(this)"/></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </script>
+
+    </table>
+
+</div>
+
+
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+</div>
+
+<div id="soProductDiv" class="rightinfo" style="display:none;width: 80%;margin-left: 200px">
+    <div class="tools">
+        <ul class="toolbar">
+            <li onclick="sureSo()"><span><img src="../demo/images/t06.png"/></span>yes</li>
+            <li onclick="hiddenSoDiv()"><span><img src="../demo/images/t03.png"/></span>no</li>
+        </ul>
+    </div>
+    <table class="tablelist" id="spxxTable">
+        <tr>
+            <td>select</td>
+            <td>product id</td>
+            <td>product name</td>
+            <td>unit price</td>
+            <td>unit</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/soLists',
+            templateId: 'soListTemplate',
+            contentId: 'soListTableBody'
+        })
+    })
+
+
+
+
+</script>

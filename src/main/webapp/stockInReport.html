@@ -1,0 +1,58 @@
+<div class="formbody" style="margin-left: 200px">
+    <form>
+        <ul class="seachform">
+
+            <li>
+                <label>日期</label>
+                <input type="text" name="" class="scinput" id="stockInTime" placeholder="please select date"/>
+            </li>
+
+
+
+            <li><label>&nbsp;</label><a href="javascript:;" onclick="searchStockInByMonth()">查询</a></li>
+
+        </ul>
+    </form>
+
+    <table class="tablelist" style="margin-top:20px">
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>product id</th>
+            <th>order id</th>
+            <th>change amount</th>
+            <th>change type</th>
+            <th>change time</th>
+            <th>user</th>
+        </tr>
+        <tbody id="poReportItemsTableBody">
+        <script id="poReportItemsListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td>{{$value.productCode}}</td>
+                <td><a href="javascript:;" onclick="showStockInDetails(this)">{{$value.orderCode}}</a></td>
+                <td>{{$value.stockNum}}</td>
+                <td>入库</td>
+                <td>{{$value.stockTime}}</td>
+                <td>{{$value.createUser}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </script>
+    </table>
+
+    <div>
+        <ul id="page" style="margin-left: 500px;margin-top: 250px;position: absolute"></ul>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    laydate.render({
+        elem: '#stockInTime',
+        type: 'month'
+    });
+
+
+
+</script>

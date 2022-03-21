@@ -1,0 +1,71 @@
+<table class="tablelist">
+    <tbody></tbody>
+        <tr>
+            <td>poInfo</td>
+            <td><input type="text" id="poInfoId" class="poinput" readonly/> <span>*</span></td>
+            <td>date</td>
+            <td><input type="text" id="poInfoTime" class="poinput" readonly/> <span>*</span>
+            </td>
+            <td>vender</td>
+            <td>
+                <select id="selPoInfoVen">
+                    <option id="poInfoVender"></option>
+                </select><span>*</span>
+            </td>
+        </tr>
+        <tr>
+            <td>creator</td>
+            <td><input type="text" id="poInfoAccount" readonly class="poinput"/> <span>*</span>
+            </td>
+            <td>fee</td>
+            <td><input type="text" id="poInfoTipFee" class="poinput" readonly/> <span>*</span></td>
+            <td>sum</td>
+            <td><input type="text" id="poInfoProductTotal" class="poinput" readonly/>
+                <span>*</span></td>
+        </tr>
+        <tr>
+            <td>pay type</td>
+            <td><select class="poinput" id="poInfoPayType" onchange="changeFee()" onload="setDefault()">
+                <option id="poPayTypeDefaultInfo"></option>
+            </select> <span>*</span></td>
+            <td>min pre-payment</td>
+            <td><input type="text" id="poInfoPrePayFee" class="poinput" id="prePayFee"
+                       readonly/> <span>*</span></td>
+            <td>ps</td>
+            <td><input type="text" id="poInfoRemark" class="poinput" readonly/></td>
+        </tr>
+</table>
+
+<table class="tablelist itemlist" style="width: 100%">
+    <tr>
+        <th>no</th>
+        <th>productNo</th>
+        <th>productName</th>
+        <th>unit price</th>
+        <th>unit</th>
+        <th>num</th>
+        <th>sum</th>
+    </tr>
+    <tbody id="poInfoListTbody">
+    <script id="poInfoListTemplate" type="text/html">
+    {{each data.poItems}}
+    <tr>
+        <td>{{$index+1}}</td>
+        <td><input type="text" name="productCode" class="poinput" value="{{$value.productCode}}"
+                   readonly/></td>
+        <td><input type="text" name="productName" class="poinput" value="{{$value.productName}}"
+                   readonly/></td>
+        <td><input type="text" name="unitPrice" class="poinput" value="{{$value.unitPrice}}"
+                   readonly/></td>
+        <td><input type="text" name="unitName" class="poinput" value="{{$value.unitName}}"
+                   readonly/></td>
+        <td><input type="text" name="num" class="poinput" value="{{$value.num}}"
+                   onchange="updateItemPrice(this)" readonly/></td>
+        <td><input type="text" name="itemPrice" class="poinput" value="{{$value.itemPrice}}"
+                   readonly/></td>
+    </tr>
+    {{/each}}
+    </tbody>
+    </script>
+</table>
+

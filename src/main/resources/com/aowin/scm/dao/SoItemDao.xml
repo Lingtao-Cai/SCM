@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aowin.scm.dao.SoItemDao">
+    <select id="getSoItemByProCode" parameterType="java.lang.String" resultType="SoItem">
+        select * from soitem where productCode=#{productCode}
+    </select>
+    <select id="findAll" resultType="SoItem">
+        select * from soitem where SOID=#{soId} limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int" parameterType="java.lang.String">
+        select count(*) from somain where SOID=#{soId}
+    </select>
+
+    <insert id="addSoItem" parameterType="SoItem">
+        insert into soitem (soId,productCode,unitPrice,num,unitName,itemPrice) values (#{soId},#{productCode},#{unitPrice},#{num},#{unitName},#{itemPrice})
+    </insert>
+
+    <delete id="removeSoItem">
+        delete from soitem where soId=#{arg0} and productCode=#{arg1}
+    </delete>
+
+    <select id="findBySoId" parameterType="java.math.BigDecimal" resultType="SoItem">
+        select * from soitem where soId=#{soId}
+    </select>
+
+    <select id="findNum" parameterType="SoItem" resultType="int">
+        select Num from soitem where soId=#{soId} and productCode=#{productCode}
+    </select>
+
+
+</mapper>

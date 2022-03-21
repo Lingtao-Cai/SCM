@@ -1,0 +1,59 @@
+<div class="formbody" style="margin-left: 200px">
+    <form>
+        <ul class="seachform">
+
+            <li>
+                <label>date</label>
+                <input type="text" name="" class="scinput" id="billReportTime" placeholder="select year&month"/>
+            </li>
+
+
+
+            <li><label>&nbsp;</label><a href="javascript:;" onclick="searchBillReportByMonth()">search</a></li>
+
+        </ul>
+    </form>
+
+    <!-- details info list -->
+    <table class="tablelist" style="margin-top:20px">
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>record id</th>
+            <th>Income time</th>
+            <th>Payment amount</th>
+            <th>Payment user</th>
+            <th>Related number</th>
+            <th>Payment type number</th>
+        </tr>
+        <tbody id="billTableBody">
+        <script id="billListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td>{{$value.record_id}}</td>
+                <td>{{$value.pay_time}}</td>
+                <td>{{$value.pay_price}}</td>
+                <td>{{$value.account}}</td>
+                <td><a href="javascript:;" onclick="showBillReportDetails(this)">{{$value.orderCode}}</a></td>
+                <td>{{$value.pay_type}}</td>
+            </tr>
+            {{/each}}
+        </script>
+        </tbody>
+    </table>
+
+    <div>
+        <ul id="page" style="margin-left: 500px;margin-top: 250px;position: absolute"></ul>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    laydate.render({
+        elem: '#billReportTime',
+        type: 'month'
+    });
+
+
+
+</script>

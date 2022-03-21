@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aowin.scm.dao.ProductDao">
+
+    <resultMap id="ProductResultMap" type="com.aowin.scm.pojo.Product">
+        <id property="productCode" column="ProductCode"/>
+        <result property="categoryId" column="pID"/>
+        <result property="name" column="pName"/>
+        <result property="unitName" column="UnitName"/>
+        <result property="price" column="Price"/>
+        <result property="createDate" column="createDate"/>
+        <result property="remark" column="mark"/>
+        <result property="num" column="Num"/>
+        <result property="poNum" column="PONum"/>
+        <result property="soNum" column="SONum"/>
+        <result property="categoryName" column="cName"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="ProductResultMap">
+        select ProductCode,p.CategoryID as pID,p.Name as pName,UnitName,Price,createDate,p.remark as mark,Num,PONum,SONum,c.Name as cName
+        from product as p inner join category as c on p.CategoryID = c.CategoryID limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int">
+        select count(*) from product
+    </select>
+
+    <select id="findAllProduct" resultType="Product">
+        select ProductCode,Name,Price,UnitName from product
+    </select>
+
+    <select id="getCategoryName" parameterType="java.lang.String" resultType="java.lang.String">
+        select category.Name from category inner join product on product.CategoryID = category.CategoryID where ProductCode = #{productCode}
+    </select>
+
+    <insert id="addProduct" parameterType="Product">
+        insert into product (ProductCode,CategoryID,Name,UnitName,Price,CreateDate,Remark,num,PONum,SONum)
+        values (#{productCode},#{categoryId},#{name},#{unitName},#{price},#{createDate},#{remark},#{num},#{poNum},#{soNum})
+    </insert>
+
+    <select id="findByCode" parameterType="java.lang.String" resultType="Product">
+        select * from product where ProductCode = #{productCode}
+    </select>
+
+    <update id="updateProduct" parameterType="Product">
+        update product set CategoryID=#{categoryId},Name=#{name},UnitName=#{unitName},Price=#{price},CreateDate=#{createDate},
+                           remark=#{remark},num=#{num},poNum=#{poNum},soNum=#{soNum} where productCode=#{productCode}
+    </update>
+
+    <delete id="removeProduct" parameterType="java.lang.String">
+        delete from product where ProductCode=#{productCode}
+    </delete>
+
+    <update id="updatePoNum" parameterType="Product">
+        update product set poNum=#{poNum} where productCode=#{productCode}
+    </update>
+
+    <update id="updateSoNum" parameterType="Product">
+        update product set soNum=#{soNum} where productCode=#{productCode}
+    </update>
+
+    <select id="findByCondition" resultType="Product">
+        select * from product
+        <where>
+            <if test="productCode != null">
+                and productCode like concat('%',#{productCode},'%')
+            </if>
+            <if test="productName != null">
+                and Name like concat('%',#{productName},'%')
+            </if>
+            <if test="numMax != null and numMax != ''">
+                and num &lt; #{numMax}
+            </if>
+            <if test="numMin != null and numMin != ''">
+                and num &gt; #{numMin}
+            </if>
+        </where>
+        limit #{first},#{max}
+    </select>
+
+    <select id="countByCondition" resultType="int" parameterType="ProductCondition">
+        select count(*) from product
+        <where>
+            <if test="productCode != null">
+                and productCode like concat('%',#{productCode},'%')
+            </if>
+            <if test="productName != null">
+                and Name like concat('%',#{productName},'%')
+            </if>
+            <if test="numMax != null and numMax != ''">
+                and num &lt; #{numMax}
+            </if>
+            <if test="numMin != null and numMin != ''">
+                and num &gt; #{numMin}
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveCount" parameterType="CheckStock">
+        insert into checkStock (productCode,originNum,realNum,stockTime,createUser,description,type) values (#{productCode},#{originNum},#{realNum},#{stockTime},#{createUser},#{description},#{type})
+    </insert>
+
+
+</mapper>

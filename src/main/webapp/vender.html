@@ -1,0 +1,77 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li><a href="#">vender management</a></li>
+        <li>list</li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+
+    <div class="tools">
+
+        <ul class="toolbar" style="margin-left: 200px">
+            <li><a href="javascript:;" onclick="addVender()"/><img src="../demo/images/t01.png"/>添加</a></li>
+        </ul>
+        vender id<input id="vCodeSearch"> vender name<input id="vNameSearch"> contactor<input id="vContactorSearch"> phone<input id="vTelSearch">
+        <input type="button" value="查询" onclick="searchVender()">
+
+    </div>
+
+
+    <table class="tablelist" style="width: 80%;margin-left: 200px">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>vender id</th>
+            <th>vender name</th>
+            <th>contactor</th>
+            <th>address</th>
+            <th>postcode</th>
+            <th>register date</th>
+            <th>phone</th>
+            <th>tax</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="venderTableBody">
+        <script id="venderListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td>{{$value.venderCode}}</td>
+                <td>{{$value.name}}</td>
+                <td>{{$value.contactor}}</td>
+                <td>{{$value.address}}</td>
+                <td>{{$value.postcode}}</td>
+                <td>{{$value.createDate}}</td>
+                <td>{{$value.tel}}</td>
+                <td>{{$value.fax}}</td>
+                <!--                <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>修改</a><a href="javascript:;" onclick="deleteUser('{{$value.account}}')">删除</a></td>-->
+                <td><a href="javascript:;" onclick="updateVender(this)"/>update</a><a href="javascript:;" onclick="deleteVender(this)">delete</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        <div>
+            <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+        </div>
+
+        </tbody>
+    </table>
+
+</div>
+
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/venders',
+            templateId: 'venderListTemplate',
+            contentId: 'venderTableBody'
+        })
+    })
+
+</script>

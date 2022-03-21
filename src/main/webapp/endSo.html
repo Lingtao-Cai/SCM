@@ -1,0 +1,122 @@
+<div class="place" style="margin-left: 200px">
+    <span>At：</span>
+    <ul class="placeul">
+        <li>sale</li>
+        <li>end</li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+    <div class="itab" href="#tab">
+        <ul>
+            <li><a href="javascript:;" onclick="findSoMain(this)"/>Cash on delivery</a></li>
+            <li><a href="javascript:;" onclick="findSoMain(this)"/>Payment to shipment</a></li>
+            <li><a href="javascript:;" onclick="findSoMain(this)"/>Prepayment to shipment</a></li>
+        </ul>
+    </div>
+</div>
+<div id="tab" class="tabson" style="margin-left: 200px">
+    <table class="tablelist">
+        <thead>
+        <tr>
+            <th>No<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>order number</th>
+            <th>date</th>
+            <th>customer</th>
+            <th>creator</th>
+            <th>extra fee</th>
+            <th>product sum</th>
+            <th>order sum</th>
+            <th>pay type</th>
+            <th>min payment</th>
+            <th>status</th>
+            <th>opt</th>
+        </tr>
+        </thead>
+        <tbody id="soEndTableBody">
+
+        <div>
+            <ul id="page" style="margin-left: 500px;margin-top: 250px;position: absolute">page</ul>
+        </div>
+
+        <script id="soEndListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showSoEndDetails(this)">{{$value.soId}}</a></td>
+                <td>{{$value.createTime}}</td>
+                <td>{{$value.customerCode}}</td>
+                <td>{{$value.account}}</td>
+                <td>{{$value.tipFee}}</td>
+                <td>{{$value.productTotal}}</td>
+                <td>{{$value.soTotal}}</td>
+                <td>{{$value.payType}}</td>
+                <td>{{$value.prePayFee}}</td>
+                <td>{{$value.status}}</td>
+                <td><a href="javascript:;" onclick="endSoMain(this)"/>了结</a></td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/findBySoPayType',
+            templateId: 'soEndListTemplate',
+            contentId: 'soEndTableBody',
+            params:{
+                payType: "货到付款",
+                account: $('#accountIn').text()
+            }
+        })
+    })
+
+    function showSoEndDetails(obj) {
+        var p = obj.text;
+        $(function () {
+            Ajax.post('/findAllCustomer', {}, function (result) {
+                $(result.data).each(function () {
+                    $('#soSelCus').append("<option value="+this.customerCode+">" + this.name + "</option>");
+                })
+            })
+
+            Ajax.post('/findAllProduct', {}, function (result) {
+                $(result.data).each(function () {
+                    var tr = $('<tr></tr>');
+                    $('#spxxTable').append(tr);
+                    tr.append(
+                        '<td><input type="radio" name="choice"/></td>'
+                        + '<td>' + this.productCode + '</td>'
+                        + '<td>' + this.name + '</td>'
+                        + '<td>' + this.price + '</td>'
+                        + '<td>' + this.unitName + '</td>'
+                    )
+                })
+            })
+        })
+        $('#soup').hide();
+        hiddenSoDiv();
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/soItems',
+            templateId: 'soItemsListTemplate',
+            contentId: 'soItemsTableBody',
+            params: {
+                soId: p
+            }
+        })
+    }
+</script>

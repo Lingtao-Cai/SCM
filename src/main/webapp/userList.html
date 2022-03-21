@@ -1,0 +1,69 @@
+<button class="btn btn-primary" type="button" onclick="addUser()"style="margin-left: 200px;width: 100px">add</button>
+
+<table class="table" id="userListDiv" style="width: 80%;margin-top: 100px">
+    <thead>
+    <tr>
+        <th>account</th>
+        <th>name</th>
+        <th>password</th>
+        <th>createDate</th>
+        <th>status</th>
+        <th>authority</th>
+        <th>operation</th>
+    </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+<div>
+    <ul id="page" style="margin-left: 500px">分页</ul>
+</div>
+
+<script id="userListTemplate" type="text/html">
+    {{each data}}
+    <tr>
+        <td>{{$value.account}}</td>
+        <td>{{$value.name}}</td>
+        <td>{{$value.password}}</td>
+        <td>{{$value.createDate}}</td>
+        <td>{{$value.status}}</td>
+        <td><a href="javascript:;" onclick="showAuthority('{{$value.account}}')"/>privilege</a></td>
+        <td><a href="javascript:;" onclick="updateUser({account: '{{$value.account}}', name: '{{$value.name}}', password: '{{$value.password}}',createDate: '{{$value.createDate}}', status: '{{$value.status}}'})"/>update</a>
+            <a href="javascript:;" onclick="deleteUser('{{$value.account}}')">del</a></td>
+    </tr>
+    {{/each}}
+</script>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/users',
+            templateId: 'userListTemplate',
+            contentId: 'tableBody',
+            params: {
+                id: 1
+            }
+        })
+    })
+
+    function showAuthority(account){
+        alert(account)
+
+        Ajax.getHtml('/authority.html', function (html) {
+            $(function (){
+                $('#account').attr('value', account);
+                Ajax.post('/getModelName', {account: account}, function (data){
+                    $('#authority').attr('value', data);
+                })
+            })
+            layer.open({
+                type: 1,
+                title: 'privilege info',
+                area: ['500px'],
+                content: html,
+                btn: ['cancel'],
+            })
+        })
+    }
+</script>

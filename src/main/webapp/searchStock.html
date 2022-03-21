@@ -1,0 +1,88 @@
+<div class="tools" id="stockSearchTool" style="margin-left: 200px">
+    no<input id="productCodeStock"> product name<input id="productNameStock"> stock range: min<input id="stockMin" value="0"> max<input id="stockMax">
+    <input type="button" value="查询" onclick="searchStockProduct()">
+
+</div>
+
+<div id="stockInfo">
+    <table class="tablelist" style="width: 80%;margin-left: 200px">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>product id</th>
+            <th>product name</th>
+            <th>stock</th>
+            <th>in transit</th>
+            <th>sold to send</th>
+        </tr>
+        </thead>
+        <tbody id="stockInfoTableBody">
+
+        <script id="stockInfoTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showStockRecords(this)">{{$value.productCode}}</a></td>
+                <td>{{$value.name}}</td>
+                <td>{{$value.num}}</td>
+                <td>{{$value.poNum}}</td>
+                <td>{{$value.soNum}}</td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+</div>
+
+<div id="stockDetails" style="display:none">
+    <table class="tablelist" style="width: 80%;margin-left: 200px">
+        <thead>
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>product id</th>
+            <th>related order id</th>
+            <th>change amount</th>
+            <th>change type</th>
+            <th>change time</th>
+            <th>user</th>
+        </tr>
+        </thead>
+        <tbody id="stockDetailsTableBody">
+
+        <script id="stockDetailsTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$value.stockId}}</td>
+                <td>{{$value.productCode}}</td>
+                <td>{{$value.orderCode}}</td>
+                <td>{{$value.stockNum}}</td>
+                <td>{{$value.stockType}}</td>
+                <td>{{$value.stockTime}}</td>
+                <td>{{$value.createUser}}</td>
+            </tr>
+            {{/each}}
+        </script>
+
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/products',
+            templateId: 'stockInfoTemplate',
+            contentId: 'stockInfoTableBody'
+        })
+    })
+
+
+
+</script>

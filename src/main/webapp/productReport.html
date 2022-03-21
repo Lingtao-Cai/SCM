@@ -1,0 +1,61 @@
+<div class="formbody" style="margin-left: 200px">
+    <form>
+        <ul class="seachform">
+
+            <li>
+                <label>date</label>
+                <input type="text" name="" class="scinput" id="productStockTime" placeholder="choose date"/>
+            </li>
+
+
+
+            <li><label>&nbsp;</label><a href="javascript:;" onclick="searchProductStockByMonth()">search</a></li>
+
+        </ul>
+    </form>
+
+    <!-- 明细信息列表 -->
+    <table class="tablelist" style="margin-top:20px">
+        <tr>
+            <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+            <th>product id</th>
+            <th>Initial inventory</th>
+            <th>actual inventory </th>
+            <th>time</th>
+            <th>user</th>
+            <th>description</th>
+            <th>type</th>
+        </tr>
+        <tbody id="productStockTableBody">
+        <script id="productStockListTemplate" type="text/html">
+            {{each data}}
+            <tr>
+                <td>{{$index+1}}</td>
+                <td><a href="javascript:;" onclick="showProductReportDetails(this)">{{$value.productCode}}</a></td>
+                <td>{{$value.originNum}}</td>
+                <td>{{$value.realNum}}</td>
+                <td>{{$value.stockTime}}</td>
+                <td>{{$value.createUser}}</td>
+                <td>{{$value.description}}</td>
+                <td>{{$value.type}}</td>
+            </tr>
+            {{/each}}
+        </script>
+        </tbody>
+    </table>
+
+    <div>
+        <ul id="page" style="margin-left: 500px;margin-top: 250px;position: absolute"></ul>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    laydate.render({
+        elem: '#productStockTime',
+        type: 'month'
+    });
+
+
+
+</script>

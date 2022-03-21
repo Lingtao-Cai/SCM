@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aowin.scm.dao.PoItemDao">
+
+    <select id="findAll" resultType="PoItem">
+        select * from poitem where POID=#{poId} limit #{first},#{max}
+    </select>
+
+    <select id="countAll" resultType="int" parameterType="java.lang.String">
+        select count(*) from pomain where POID=#{poId}
+    </select>
+
+    <insert id="addPoItem" parameterType="PoItem">
+        insert into poitem (poId,productCode,unitPrice,num,unitName,itemPrice) values (#{poId},#{productCode},#{unitPrice},#{num},#{unitName},#{itemPrice})
+    </insert>
+
+    <delete id="removePoItem" parameterType="java.math.BigDecimal">
+        delete from poitem where poId=#{poId}
+    </delete>
+
+    <select id="findByPoId" parameterType="java.math.BigDecimal" resultType="PoItem">
+        select * from poitem where poId=#{poId}
+    </select>
+
+    <select id="findNum" parameterType="PoItem" resultType="int">
+        select Num from poitem where poId=#{poId} and productCode=#{productCode}
+    </select>
+    
+
+
+</mapper>

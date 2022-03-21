@@ -1,0 +1,57 @@
+<div>
+    <div class="place"  style="margin-left: 200px">
+        <span>At：</span>
+        <ul class="placeul">
+            <li><a href="#">Stock management</a></li>
+            <li><a href="#">Stock count</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+        <table class="tablelist" style="width: 80%;margin-left: 200px">
+            <thead>
+            <tr>
+                <th>no<span class="sort"><img src="../demo/images/px.gif" /></span></th>
+                <th>Product id</th>
+                <th>Product name</th>
+                <th>In stock</th>
+                <th>In transit num</th>
+                <th>pre-sales</th>
+                <th>operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tbody id="countStockBody">
+            <script id="countStockTemplate" type="text/html">
+                {{each data}}
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td>{{$value.productCode}}</td>
+                    <td>{{$value.name}}</td>
+                    <td>{{$value.num}}</td>
+                    <td>{{$value.poNum}}</td>
+                    <td>{{$value.soNum}}</td>
+                    <td><a href="javascript:;" onclick="changeCount(this)">Count</a></td>
+                </tr>
+                {{/each}}
+            </script>
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <ul id="page" style="margin-left: 500px;margin-top: 150px;position: absolute">page</ul>
+</div>
+
+<script>
+    $(function () {
+        showPage({
+            currentPage: 1,
+            pageSize: 2,
+            url: '/products',
+            templateId: 'countStockTemplate',
+            contentId: 'countStockBody'
+        })
+    })
+</script>
